@@ -30,14 +30,14 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
 
-    products = models.ManyToManyField(Product, through="OrderItem", related_name='orders')
+    products = models.ManyToManyField(Product, through="OrderItem")
 
     def __str__(self):
         return f"Order {self.order_id} created by {self.user.username}"
     
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product')
     quantity = models.PositiveIntegerField()
 
     @property
